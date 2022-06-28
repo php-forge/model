@@ -23,6 +23,15 @@ interface ModelContract
     public function getCastValue(string $attribute): mixed;
 
     /**
+     * Return the raw data for the model.
+     *
+     * @param string $value the value to get data value for the model.
+     *
+     * @return mixed
+     */
+    public function getRawData(string $value = ''): mixed;
+
+    /**
      * Returns the form name that this model class should use.
      *
      * The form name is mainly used by {@see \Yii\Extension\Model\FormModelAttributes} to determine how to name the

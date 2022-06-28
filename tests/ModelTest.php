@@ -19,15 +19,6 @@ final class ModelTest extends TestCase
         $this->assertSame(['public', 'login', 'password'], $model->attributes());
     }
 
-    public function testGetAttributeValue(): void
-    {
-        $model = new Model();
-        $model->setValue('login', 'admin');
-        $model->setValue('password', '123456');
-        $this->assertSame('admin', $model->getAttributeValue('login'));
-        $this->assertSame('123456', $model->getAttributeValue('password'));
-    }
-
     public function testGetFormName(): void
     {
         $model = new Model();
@@ -39,6 +30,15 @@ final class ModelTest extends TestCase
 
         $model = new \NonNamespaced();
         $this->assertSame('NonNamespaced', $model->getFormName());
+    }
+
+    public function testGetRawData(): void
+    {
+        $model = new Model();
+        $this->assertTrue($model->load(['Model' => ['login' => 'test', 'password' => 'test']]));
+        $this->assertSame(['login' => 'test', 'password' => 'test'], $model->getRawData());
+        $this->assertSame('test', $model->getRawData('login'));
+        $this->assertSame('test', $model->getRawData('password'));
     }
 
     public function testHas(): void
@@ -58,8 +58,8 @@ final class ModelTest extends TestCase
     {
         $model = new Model();
         $this->assertTrue($model->load(['Model' => ['login' => 'test', 'password' => 'test']]));
-        $this->assertSame('test', $model->getAttributeValue('login'));
-        $this->assertSame('test', $model->getAttributeValue('password'));
+        $this->assertSame('test', $model->getRawData('login'));
+        $this->assertSame('test', $model->getRawData('password'));
     }
 
     public function testLoadPublicField(): void
@@ -102,8 +102,8 @@ final class ModelTest extends TestCase
         $model = new Model();
         $model->setValue('login', 'test');
         $model->setValue('password', 'test');
-        $this->assertSame('test', $model->getAttributeValue('login'));
-        $this->assertSame('test', $model->getAttributeValue('password'));
+        $this->assertSame('test', $model->getRawData('login'));
+        $this->assertSame('test', $model->getRawData('password'));
     }
 
     public function testSetFormErrors(): void

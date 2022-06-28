@@ -10,29 +10,22 @@ use PHPUnit\Framework\TestCase;
 
 final class FormModelNestedTest extends TestCase
 {
-    public function testGetAttributeValue(): void
-    {
-        $formModel = new Nested();
-        //$formModel->setValue('user.login', 'admin');
-        $this->assertNull($formModel->getAttributeValue('user.login'));
-    }
-
-    public function testGetAttributeValueNotNestedException(): void
+    public function testgetRawDataNotNestedException(): void
     {
         $formModel = new Nested();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Attribute "profile" is not a nested attribute.');
-        $formModel->getAttributeValue('profile.user');
+        $formModel->getRawData('profile.user');
     }
 
-    public function testGetAttributeValueUndefinedPropertyException(): void
+    public function testgetRawDataUndefinedPropertyException(): void
     {
         $formModel = new Nested();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage(
             'Undefined property: "Forge\Model\Tests\TestSupport\FormModel\Login::noExist'
         );
-        $formModel->getAttributeValue('user.noExist');
+        $formModel->getRawData('user.noExist');
     }
 
     public function testGetHint(): void
@@ -53,6 +46,13 @@ final class FormModelNestedTest extends TestCase
         $this->assertSame('Write Username or Email.', $formModel->getPlaceHolder('user.login'));
     }
 
+    public function testGetRawData(): void
+    {
+        $formModel = new Nested();
+        //$formModel->setValue('user.login', 'admin');
+        $this->assertNull($formModel->getRawData('user.login'));
+    }
+
     public function testHasException(): void
     {
         $form = new Nested();
@@ -67,8 +67,8 @@ final class FormModelNestedTest extends TestCase
     public function testLoadPublicField(): void
     {
         $formModel = new Nested();
-        $this->assertEmpty($formModel->getAttributeValue('user.login'));
-        $this->assertEmpty($formModel->getAttributeValue('user.password'));
+        $this->assertEmpty($formModel->getRawData('user.login'));
+        $this->assertEmpty($formModel->getRawData('user.password'));
 
         $data = [
             'Nested' => [
@@ -78,7 +78,7 @@ final class FormModelNestedTest extends TestCase
         ];
 
         $this->assertTrue($formModel->load($data));
-        $this->assertSame('joe', $formModel->getAttributeValue('user.login'));
-        $this->assertSame('123456', $formModel->getAttributeValue('user.password'));
+        $this->assertSame('joe', $formModel->getRawData('user.login'));
+        $this->assertSame('123456', $formModel->getRawData('user.password'));
     }
 }

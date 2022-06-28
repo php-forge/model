@@ -155,7 +155,7 @@ final class FormModelAttributes
      */
     public static function getValue(FormModelContract $formModel, string $attribute): mixed
     {
-        return $formModel->getAttributeValue(self::getName($formModel, $attribute));
+        return $formModel->getRawData(self::getName($formModel, $attribute));
     }
 
     /**

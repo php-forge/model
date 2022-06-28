@@ -44,11 +44,6 @@ abstract class Model implements ModelContract
         };
     }
 
-    public function getAttributeValue(string $attribute): mixed
-    {
-        return $this->rawData[$attribute] ?? $this->getCastValue($attribute);
-    }
-
     public function getCastValue(string $attribute): mixed
     {
         return $this->readProperty($attribute);
@@ -69,6 +64,14 @@ abstract class Model implements ModelContract
         }
 
         return substr($className, 1);
+    }
+
+    public function getRawData(string $value = ''): mixed
+    {
+        return match (empty($value)) {
+            true => $this->rawData,
+            false => $this->rawData[$value] ?? $this->getCastValue($value),
+        };
     }
 
     public function has(string $attribute): bool

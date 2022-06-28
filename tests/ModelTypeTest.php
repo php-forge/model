@@ -37,7 +37,7 @@ final class ModelTypeTest extends TestCase
         };
 
         $model->setValue('string', $objectStringable);
-        $this->assertSame('joe doe', $model->getAttributeValue('string'));
+        $this->assertSame('joe doe', $model->getRawData('string'));
     }
 
     public function testSetValue(): void
@@ -46,23 +46,23 @@ final class ModelTypeTest extends TestCase
 
         // value is array
         $model->setValue('array', []);
-        $this->assertSame([], $model->getAttributeValue('array'));
+        $this->assertSame([], $model->getRawData('array'));
 
         // value is string
         $model->setValue('string', 'string');
-        $this->assertSame('string', $model->getAttributeValue('string'));
+        $this->assertSame('string', $model->getRawData('string'));
 
         // value is int
         $model->setvalue('int', 1);
-        $this->assertSame(1, $model->getAttributeValue('int'));
+        $this->assertSame(1, $model->getRawData('int'));
 
         // value is bool
         $model->setValue('bool', true);
-        $this->assertSame(true, $model->getAttributeValue('bool'));
+        $this->assertSame(true, $model->getRawData('bool'));
 
         // value is null
         $model->setValue('object', null);
-        $this->assertNull($model->getAttributeValue('object'));
+        $this->assertNull($model->getRawData('object'));
     }
 
     public function testSetValueException(): void
