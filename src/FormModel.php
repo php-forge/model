@@ -36,12 +36,10 @@ abstract class FormModel extends Model implements FormModelContract
         $label = $labels[$attribute] ?? $this->generateLabel($attribute);
         $nestedLabel = $this->getNestedValue('getLabel', $attribute);
 
-        $label = match ($this->has($attribute)) {
+        return match ($this->has($attribute)) {
             true => $nestedLabel === '' ? $label : $nestedLabel,
             false => throw new InvalidArgumentException("Attribute '$attribute' does not exist."),
         };
-
-        return $label;
     }
 
     /**
@@ -58,12 +56,10 @@ abstract class FormModel extends Model implements FormModelContract
         $placeHolder = $placeHolders[$attribute] ?? '';
         $nestedPlaceholder = $this->getNestedValue('getPlaceholder', $attribute);
 
-        $placeHolder = match ($this->has($attribute)) {
+        return match ($this->has($attribute)) {
             true => $nestedPlaceholder === '' ? $placeHolder : $nestedPlaceholder,
             false => throw new InvalidArgumentException("Attribute '$attribute' does not exist."),
         };
-
-        return $placeHolder;
     }
 
     /**
