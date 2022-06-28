@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yii\Extension\Widget\Tests;
+namespace Forge\Widget\Tests;
 
 use PHPUnit\Framework\TestCase;
 
