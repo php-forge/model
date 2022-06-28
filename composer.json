@@ -1,5 +1,5 @@
 {
-    "name": "php-forge/model",
+    "name": "forge/model",
     "type": "library",
     "description": "Simple model for Yii3.",
     "keywords": [
