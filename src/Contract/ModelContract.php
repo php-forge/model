@@ -20,22 +20,22 @@ interface ModelContract
      *
      * @return mixed
      */
-    public function getCastValue(string $attribute): mixed;
+    public function getAttributeValue(string $attribute): mixed;
 
     /**
      * Return the raw data for the model.
      *
-     * @param string $value the value to get data value for the model.
+     * @param array $value the value to get data value for the model.
      *
      * @return mixed
      */
-    public function getRawData(string $value = ''): mixed;
+    public function getData(): array;
 
     /**
      * Returns the form name that this model class should use.
      *
-     * The form name is mainly used by {@see \Yii\Extension\Model\FormModelAttributes} to determine how to name the
-     * input fields for the attributes in a model.
+     * The form name is mainly used by {@see \Forge\Model\FormModelAttributes} to determine how to name the input fields
+     * for the attributes in a model.
      * If the form name is "A" and an attribute name is "b", then the corresponding input name would be "A[b]".
      * If the form name is an empty string, then the input name would be "b".
      *
