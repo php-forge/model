@@ -21,10 +21,10 @@ use function substr;
 
 abstract class Model implements ModelContract
 {
-    private ?ModelErrorsContract $modelErrors = null;
+    private array $data = [];
     private ?Inflector $inflector = null;
+    private ?ModelErrorsContract $modelErrors = null;
     private ModelType $modelTypes;
-    private array $rawData = [];
 
     public function __construct()
     {
@@ -44,9 +44,14 @@ abstract class Model implements ModelContract
         };
     }
 
-    public function getCastValue(string $attribute): mixed
+    public function getAttributeValue(string $attribute): mixed
     {
         return $this->readProperty($attribute);
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
     }
 
     /**
@@ -66,14 +71,6 @@ abstract class Model implements ModelContract
         return substr($className, 1);
     }
 
-    public function getRawData(string $value = ''): mixed
-    {
-        return match (empty($value)) {
-            true => $this->rawData,
-            false => $this->rawData[$value] ?? $this->getCastValue($value),
-        };
-    }
-
     public function has(string $attribute): bool
     {
         [$attribute, $nested] = $this->getNested($attribute);
@@ -83,7 +80,7 @@ abstract class Model implements ModelContract
 
     public function isEmpty(): bool
     {
-        return empty($this->rawData);
+        return $this->data === [];
     }
 
     /**
@@ -96,20 +93,20 @@ abstract class Model implements ModelContract
     {
         $this->error()->clear();
 
-        $this->rawData = [];
+        $this->data = [];
         $scope = $formName ?? $this->getFormName();
 
         /** @psalm-var array<string, string> */
-        $this->rawData = match (empty($scope)) {
+        $this->data = match (empty($scope)) {
             true => $data,
             false => $data[$scope] ?? [],
         };
 
-        foreach ($this->rawData as $name => $value) {
+        foreach ($this->data as $name => $value) {
             $this->setValue($name, $value);
         }
 
-        return $this->rawData !== [];
+        return $this->data !== [];
     }
 
     public function setFormErrors(ModelErrorsContract $modelErrors): void
@@ -165,7 +162,7 @@ abstract class Model implements ModelContract
 
         if ($nested !== null) {
             /** @var ModelContract $attributeNestedValue */
-            $attributeNestedValue = $this->getCastValue($attribute);
+            $attributeNestedValue = $this->getAttributeValue($attribute);
             /** @var string */
             $result = $attributeNestedValue->$method($nested);
         }
@@ -212,7 +209,7 @@ abstract class Model implements ModelContract
         $getter = static function (ModelContract $class, string $attribute, ?string $nested): mixed {
             return match ($nested) {
                 null => $class->$attribute,
-                default => $class->$attribute->getCastValue($nested),
+                default => $class->$attribute->getAttributeValue($nested),
             };
         };
 

@@ -13,6 +13,41 @@ use StdClass;
 
 final class FormModelAttributesTest extends TestCase
 {
+    public function testGetAttributeValue(): void
+    {
+        $formModel = new PropertyType();
+
+        $formModel->setValue('array', [1, 2]);
+        $this->assertIsArray($formModel->getAttributeValue('array'));
+        $this->assertSame([1, 2], $formModel->getAttributeValue('array'));
+
+        $formModel->setValue('bool', true);
+        $this->assertIsBool($formModel->getAttributeValue('bool'));
+        $this->assertSame(true, $formModel->getAttributeValue('bool'));
+
+        $formModel->setValue('float', 1.2023);
+        $this->assertIsFloat($formModel->getAttributeValue('float'));
+        $this->assertSame(1.2023, $formModel->getAttributeValue('float'));
+
+        $formModel->setValue('int', 1);
+        $this->assertIsInt($formModel->getAttributeValue('int'));
+        $this->assertSame(1, $formModel->getAttributeValue('int'));
+
+        $formModel->setValue('object', new StdClass());
+        $this->assertIsObject($formModel->getAttributeValue('object'));
+        $this->assertInstanceOf(StdClass::class, $formModel->getAttributeValue('object'));
+
+        $formModel->setValue('string', 'samdark');
+        $this->assertIsString($formModel->getAttributeValue('string'));
+        $this->assertSame('samdark', $formModel->getAttributeValue('string'));
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Undefined property: "Forge\Model\Tests\TestSupport\FormModel\PropertyType::noExist".'
+        );
+        $formModel->getAttributeValue('noExist');
+    }
+
     public function testGetHint(): void
     {
         $formModel = new Login();
@@ -75,41 +110,6 @@ final class FormModelAttributesTest extends TestCase
         $this->assertSame([], $formModel->getPlaceHolders());
     }
 
-    public function testGetRawData(): void
-    {
-        $formModel = new PropertyType();
-
-        $formModel->setValue('array', [1, 2]);
-        $this->assertIsArray($formModel->getRawData('array'));
-        $this->assertSame([1, 2], $formModel->getRawData('array'));
-
-        $formModel->setValue('bool', true);
-        $this->assertIsBool($formModel->getRawData('bool'));
-        $this->assertSame(true, $formModel->getRawData('bool'));
-
-        $formModel->setValue('float', 1.2023);
-        $this->assertIsFloat($formModel->getRawData('float'));
-        $this->assertSame(1.2023, $formModel->getRawData('float'));
-
-        $formModel->setValue('int', 1);
-        $this->assertIsInt($formModel->getRawData('int'));
-        $this->assertSame(1, $formModel->getRawData('int'));
-
-        $formModel->setValue('object', new StdClass());
-        $this->assertIsObject($formModel->getRawData('object'));
-        $this->assertInstanceOf(StdClass::class, $formModel->getRawData('object'));
-
-        $formModel->setValue('string', 'samdark');
-        $this->assertIsString($formModel->getRawData('string'));
-        $this->assertSame('samdark', $formModel->getRawData('string'));
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage(
-            'Undefined property: "Forge\Model\Tests\TestSupport\FormModel\PropertyType::noExist".'
-        );
-        $formModel->getRawData('noExist');
-    }
-
     public function testHas(): void
     {
         $formModel = new Login();
@@ -125,31 +125,31 @@ final class FormModelAttributesTest extends TestCase
         $formModel = new PropertyType();
 
         $formModel->setValue('array', []);
-        $this->assertIsArray($formModel->getRawData('array'));
+        $this->assertIsArray($formModel->getAttributeValue('array'));
 
         $formModel->setValue('bool', false);
-        $this->assertIsBool($formModel->getRawData('bool'));
+        $this->assertIsBool($formModel->getAttributeValue('bool'));
 
         $formModel->setValue('bool', 'false');
-        $this->assertIsBool($formModel->getRawData('bool'));
+        $this->assertIsBool($formModel->getAttributeValue('bool'));
 
         $formModel->setValue('float', 1.434536);
-        $this->assertIsFloat($formModel->getRawData('float'));
+        $this->assertIsFloat($formModel->getAttributeValue('float'));
 
         $formModel->setValue('float', '1.434536');
-        $this->assertIsFloat($formModel->getRawData('float'));
+        $this->assertIsFloat($formModel->getAttributeValue('float'));
 
         $formModel->setValue('int', 1);
-        $this->assertIsInt($formModel->getRawData('int'));
+        $this->assertIsInt($formModel->getAttributeValue('int'));
 
         $formModel->setValue('int', '1');
-        $this->assertIsInt($formModel->getRawData('int'));
+        $this->assertIsInt($formModel->getAttributeValue('int'));
 
         $formModel->setValue('object', new stdClass());
-        $this->assertIsObject($formModel->getRawData('object'));
+        $this->assertIsObject($formModel->getAttributeValue('object'));
 
         $formModel->setValue('string', '');
-        $this->assertIsString($formModel->getRawData('string'));
+        $this->assertIsString($formModel->getAttributeValue('string'));
     }
 
     public function testSets(): void
@@ -168,12 +168,12 @@ final class FormModelAttributesTest extends TestCase
             ],
         );
 
-        $this->assertIsArray($formModel->getRawData('array'));
-        $this->assertIsBool($formModel->getRawData('bool'));
-        $this->assertIsFloat($formModel->getRawData('float'));
-        $this->assertIsInt($formModel->getRawData('int'));
-        $this->assertIsObject($formModel->getRawData('object'));
-        $this->assertIsString($formModel->getRawData('string'));
+        $this->assertIsArray($formModel->getAttributeValue('array'));
+        $this->assertIsBool($formModel->getAttributeValue('bool'));
+        $this->assertIsFloat($formModel->getAttributeValue('float'));
+        $this->assertIsInt($formModel->getAttributeValue('int'));
+        $this->assertIsObject($formModel->getAttributeValue('object'));
+        $this->assertIsString($formModel->getAttributeValue('string'));
 
         // setValue attributes with array and to camel case enabled.
         $formModel->setValues(
@@ -187,12 +187,12 @@ final class FormModelAttributesTest extends TestCase
             ],
         );
 
-        $this->assertIsArray($formModel->getRawData('array'));
-        $this->assertIsBool($formModel->getRawData('bool'));
-        $this->assertIsFloat($formModel->getRawData('float'));
-        $this->assertIsInt($formModel->getRawData('int'));
-        $this->assertIsObject($formModel->getRawData('object'));
-        $this->assertIsString($formModel->getRawData('string'));
+        $this->assertIsArray($formModel->getAttributeValue('array'));
+        $this->assertIsBool($formModel->getAttributeValue('bool'));
+        $this->assertIsFloat($formModel->getAttributeValue('float'));
+        $this->assertIsInt($formModel->getAttributeValue('int'));
+        $this->assertIsObject($formModel->getAttributeValue('object'));
+        $this->assertIsString($formModel->getAttributeValue('string'));
     }
 
     public function testSetsException(): void

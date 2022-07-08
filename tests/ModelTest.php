@@ -19,6 +19,21 @@ final class ModelTest extends TestCase
         $this->assertSame(['public', 'login', 'password'], $model->attributes());
     }
 
+    public function testGetAttributeValue(): void
+    {
+        $model = new Model();
+        $this->assertTrue($model->load(['Model' => ['login' => 'test', 'password' => 'test']]));
+        $this->assertSame('test', $model->getAttributeValue('login'));
+        $this->assertSame('test', $model->getAttributeValue('password'));
+    }
+
+    public function testGetData(): void
+    {
+        $model = new Model();
+        $this->assertTrue($model->load(['Model' => ['login' => 'test', 'password' => 'test']]));
+        $this->assertSame(['login' => 'test', 'password' => 'test'], $model->getData());
+    }
+
     public function testGetFormName(): void
     {
         $model = new Model();
@@ -30,15 +45,6 @@ final class ModelTest extends TestCase
 
         $model = new \NonNamespaced();
         $this->assertSame('NonNamespaced', $model->getFormName());
-    }
-
-    public function testGetRawData(): void
-    {
-        $model = new Model();
-        $this->assertTrue($model->load(['Model' => ['login' => 'test', 'password' => 'test']]));
-        $this->assertSame(['login' => 'test', 'password' => 'test'], $model->getRawData());
-        $this->assertSame('test', $model->getRawData('login'));
-        $this->assertSame('test', $model->getRawData('password'));
     }
 
     public function testHas(): void
@@ -58,8 +64,8 @@ final class ModelTest extends TestCase
     {
         $model = new Model();
         $this->assertTrue($model->load(['Model' => ['login' => 'test', 'password' => 'test']]));
-        $this->assertSame('test', $model->getRawData('login'));
-        $this->assertSame('test', $model->getRawData('password'));
+        $this->assertSame('test', $model->getAttributeValue('login'));
+        $this->assertSame('test', $model->getAttributeValue('password'));
     }
 
     public function testLoadPublicField(): void
@@ -91,10 +97,10 @@ final class ModelTest extends TestCase
             'bool' => 'false',
             'string' => 555,
         ], '');
-        $this->assertIsInt($model->getCastValue('int'));
-        $this->assertIsFloat($model->getCastValue('float'));
-        $this->assertIsBool($model->getCastValue('bool'));
-        $this->assertIsString($model->getCastValue('string'));
+        $this->assertIsInt($model->getAttributeValue('int'));
+        $this->assertIsFloat($model->getAttributeValue('float'));
+        $this->assertIsBool($model->getAttributeValue('bool'));
+        $this->assertIsString($model->getAttributeValue('string'));
     }
 
     public function testSet(): void
@@ -102,8 +108,8 @@ final class ModelTest extends TestCase
         $model = new Model();
         $model->setValue('login', 'test');
         $model->setValue('password', 'test');
-        $this->assertSame('test', $model->getRawData('login'));
-        $this->assertSame('test', $model->getRawData('password'));
+        $this->assertSame('test', $model->getAttributeValue('login'));
+        $this->assertSame('test', $model->getAttributeValue('password'));
     }
 
     public function testSetFormErrors(): void
