@@ -27,6 +27,13 @@ final class ModelTest extends TestCase
         $this->assertSame('test', $model->getAttributeValue('password'));
     }
 
+    public function testGetData(): void
+    {
+        $model = new Model();
+        $this->assertTrue($model->load(['Model' => ['login' => 'test', 'password' => 'test']]));
+        $this->assertSame(['login' => 'test', 'password' => 'test'], $model->getData());
+    }
+
     public function testGetFormName(): void
     {
         $model = new Model();

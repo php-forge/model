@@ -51,7 +51,7 @@ abstract class Model implements ModelContract
 
     public function getData(): array
     {
-        $this->data;
+        return $this->data;
     }
 
     /**

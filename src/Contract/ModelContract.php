@@ -25,9 +25,7 @@ interface ModelContract
     /**
      * Return the raw data for the model.
      *
-     * @param array $value the value to get data value for the model.
-     *
-     * @return mixed
+     * @return array
      */
     public function getData(): array;
 
